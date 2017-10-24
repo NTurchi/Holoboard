@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HoloToolkit.Unity.InputModule;
+
 using UnityEngine;
 using UnityEngine.VR.WSA.Input;
 
@@ -25,7 +26,9 @@ namespace Assets.HoloBoard.Scripts
 
         // Prochaine fonctionnalités
         public GameObject InkObj;
-    
+
+        public GameObject debugObj;
+        public List<GameObject> positionsDebug;
 
         void Awake()
         {
@@ -150,6 +153,9 @@ namespace Assets.HoloBoard.Scripts
             // Push board on modal
             InputManager.Instance.PushModalInputHandler(this.gameObject);
 
+            this.debugObj.GetComponent<Renderer>().material.color = Color.blue;
+            
+
             // Initiation du trait
             InitNewLine();
             Vector3 startPosition = this.GetHandBoardHitPosition(eventData);
@@ -162,7 +168,17 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="eventData"></param>
         public void OnManipulationUpdated(ManipulationEventData eventData)
         {
-            AddNewPositionToTheCurrentLine(this.GetHandBoardHitPosition(eventData));
+           
+            this.debugObj.GetComponent<Renderer>().material.color = Color.green;
+            Vector3 posi = this.GetHandBoardHitPosition(eventData);
+            var pos = new List<float>(){ posi.x, posi.y, posi.z };
+            for (int i = 0; i < 3; i++)
+            {
+                this.positionsDebug[i].GetComponent<TextMesh>().text = pos[i].ToString();
+            }
+
+
+            AddNewPositionToTheCurrentLine(posi);
         }
 
         /// <summary>
@@ -171,6 +187,8 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="eventData"></param>
         public void OnManipulationCompleted(ManipulationEventData eventData)
         {
+            this.debugObj.GetComponent<Renderer>().material.color = Color.white;
+
             InputManager.Instance.PopModalInputHandler();
         }
 
@@ -180,6 +198,8 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="eventData"></param>
         public void OnManipulationCanceled(ManipulationEventData eventData)
         {
+            this.debugObj.GetComponent<Renderer>().material.color = Color.white;
+
             InputManager.Instance.PopModalInputHandler();
         }
 
