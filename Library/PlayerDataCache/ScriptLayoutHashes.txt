@@ -206,7 +206,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 8644983781391a1a0c05940eaa565fef Assembly-CSharp.dll:HoloToolkit.Unity.SpatialMapping.RemoteMeshSource
 4c81c8962ca9c4dfc6f330235be37fe9 Assembly-CSharp.dll:HoloToolkit.Sharing.Utilities.DirectPairing
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:HoloToolkit.Unity.InputModule.DictationInputManager
-2f0dbf3a6bfb8be5f8bef924b46595d1 Assembly-CSharp.dll:Assets.HoloBoard.Scripts.WriteOnBoardScript
+a59dbac3388eb74150094eecbf524731 Assembly-CSharp.dll:Assets.HoloBoard.Scripts.WriteOnBoardScript
 960588de1ff099aa2d1b4ff55adb229b Assembly-CSharp.dll:HoloToolkit.Unity.InputModule.TriggerButton
 caf36d571bbde50738bdafae2e623420 Assembly-CSharp.dll:HoloToolkit.UI.Keyboard.SymbolDisableHighlight
 948c70f4462bd2abeb55a6d471b27252 Assembly-CSharp.dll:HoloToolkit.Unity.InputModule.ManualHandControl

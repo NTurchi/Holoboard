@@ -27,8 +27,11 @@ namespace Assets.HoloBoard.Scripts
         // Prochaine fonctionnalités
         public GameObject InkObj;
 
-        public GameObject debugObj;
-        public List<GameObject> positionsDebug;
+        /// <summary>
+        /// Cursor app
+        /// </summary>
+        public GameObject HoloCursor;
+        
 
         void Awake()
         {
@@ -42,7 +45,6 @@ namespace Assets.HoloBoard.Scripts
         // Prochaines fonctionnalités
         public void HandDetected(InteractionSourceState source)
         {
-            Debug.unityLogger.Log("TS" + source.source.kind);
             if (source.source.kind == InteractionSourceKind.Hand)
             {
                 Vector3 handPos;
@@ -51,7 +53,7 @@ namespace Assets.HoloBoard.Scripts
                 if (source.properties.location.TryGetPosition(out handPos))
                 {
                     RaycastHit hitInfo;
-                    if (Physics.Raycast(handPos, Vector3.forward, out hitInfo))
+                    if (Physics.Raycast(handPos, Camera.main.transform.forward, out hitInfo))
                     {
                         Vector3 pos = hitInfo.point;
                         InkObj.transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y, InkObj.transform.position.z);
@@ -98,10 +100,7 @@ namespace Assets.HoloBoard.Scripts
             lineR.endColor = _lineColor.color;
             lineR.useWorldSpace = true;
 
-            Debug.unityLogger.Log(_lines.Count);
-
             this._lines.Add(line);
-            Debug.unityLogger.Log(_lines.Count);
 
         }
 
@@ -111,12 +110,10 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="position">The new point position</param>
         public void AddNewPositionToTheCurrentLine(Vector3 position)
         {
-            Debug.unityLogger.Log(_lines.Count);
             LineRenderer line = this._lines.Last().GetComponent<LineRenderer>();
             line.positionCount += 1;
             line.useWorldSpace = true;
             line.SetPosition(line.positionCount - 1, new Vector3(position.x, position.y, this.gameObject.transform.parent.position.z - 0.02f));
-       
         }
 
         /// <summary>
@@ -124,12 +121,10 @@ namespace Assets.HoloBoard.Scripts
         /// </summary>
         /// <param name="eventData"></param>
         /// <returns>The hit point on the board</returns>
-        private Vector3 GetHandBoardHitPosition(InputEventData eventData)
+        private Vector3 GetHandBoardHitPosition(Vector3 position)
         {
-            Vector3 position;
-            eventData.InputSource.TryGetPosition(eventData.SourceId, out position);
             RaycastHit hitInfo;
-            Physics.Raycast(position, Vector3.forward, out hitInfo);
+            Physics.Raycast(position, HoloCursor.transform.position, out hitInfo);
             return hitInfo.point;
         }
 
@@ -152,13 +147,12 @@ namespace Assets.HoloBoard.Scripts
         {
             // Push board on modal
             InputManager.Instance.PushModalInputHandler(this.gameObject);
-
-            this.debugObj.GetComponent<Renderer>().material.color = Color.blue;
-            
+           
+            HoloCursor.SetActive(false);
 
             // Initiation du trait
             InitNewLine();
-            Vector3 startPosition = this.GetHandBoardHitPosition(eventData);
+            Vector3 startPosition = this.GetHandBoardHitPosition(eventData.CumulativeDelta);
             AddNewPositionToTheCurrentLine(startPosition);
         }
 
@@ -168,17 +162,8 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="eventData"></param>
         public void OnManipulationUpdated(ManipulationEventData eventData)
         {
-           
-            this.debugObj.GetComponent<Renderer>().material.color = Color.green;
-            Vector3 posi = this.GetHandBoardHitPosition(eventData);
-            var pos = new List<float>(){ posi.x, posi.y, posi.z };
-            for (int i = 0; i < 3; i++)
-            {
-                this.positionsDebug[i].GetComponent<TextMesh>().text = pos[i].ToString();
-            }
-
-
-            AddNewPositionToTheCurrentLine(posi);
+            Vector3 pos = this.GetHandBoardHitPosition(eventData.CumulativeDelta);
+            AddNewPositionToTheCurrentLine(pos);
         }
 
         /// <summary>
@@ -187,8 +172,7 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="eventData"></param>
         public void OnManipulationCompleted(ManipulationEventData eventData)
         {
-            this.debugObj.GetComponent<Renderer>().material.color = Color.white;
-
+            HoloCursor.SetActive(true);
             InputManager.Instance.PopModalInputHandler();
         }
 
@@ -198,8 +182,7 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="eventData"></param>
         public void OnManipulationCanceled(ManipulationEventData eventData)
         {
-            this.debugObj.GetComponent<Renderer>().material.color = Color.white;
-
+            HoloCursor.SetActive(true);
             InputManager.Instance.PopModalInputHandler();
         }
 
@@ -209,8 +192,10 @@ namespace Assets.HoloBoard.Scripts
         /// <param name="eventData"></param>
         public void OnInputClicked(InputClickedEventData eventData)
         {
+            Vector3 positionClick;
+            eventData.InputSource.TryGetPosition(eventData.SourceId, out positionClick);
             // Dessin du point
-            Vector3 position = this.GetHandBoardHitPosition(eventData);
+            Vector3 position = this.GetHandBoardHitPosition(positionClick);
             AddPoint(position);
         }
     }
