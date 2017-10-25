@@ -8,11 +8,16 @@ using UnityEngine.VR.WSA.Input;
 namespace Assets.HoloBoard.Scripts
 {
     public class WriteOnBoardScript : MonoBehaviour, IManipulationHandler, IInputClickHandler
-    {
-        /// <summary>
-        /// Drawing line on the board
-        /// </summary>
-        private readonly List<GameObject> _lines = new List<GameObject>();
+	{
+		/// <summary>
+		/// Drawing line on the board
+		/// </summary>
+		private readonly List<GameObject> _lines = new List<GameObject>();
+
+		/// <summary>
+		/// Drawing line on the board
+		/// </summary>
+		private readonly List<GameObject> _linesBackup = new List<GameObject>();
 
         /// <summary>
         /// Pen color
@@ -213,6 +218,28 @@ namespace Assets.HoloBoard.Scripts
             Vector3 position = this.GetHandBoardHitPosition(eventData);
             AddPoint(position);
         }
+
+		/// <summary>
+		/// Removes the board and backup it content.
+		/// </summary>
+		public void RemoveBoard()
+		{
+			if(this._linesBackup.Count() > 0){
+				this._linesBackup.Clear();
+			}
+			this._linesBackup.AddRange(_lines);
+			this._lines.Clear();
+		}
+
+		/// <summary>
+		/// Restores the board.
+		/// </summary>
+		public void RestoreBoard()
+		{
+			if(this._linesBackup.Count() > 0){
+				this._lines.AddRange (_linesBackup);
+			}
+		}
     }
 }
 
