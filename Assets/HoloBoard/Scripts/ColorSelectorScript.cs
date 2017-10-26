@@ -28,6 +28,10 @@ namespace Assets.HoloBoard.Scripts
         {
             _currentSelectedGameObject = gameObject.GetComponentsInChildren<Transform>()[1].gameObject;
             _tmpSelector = Instantiate(SelectorPrefab, _currentSelectedGameObject.transform);
+            foreach (Renderer r in _tmpSelector.GetComponentsInChildren<Renderer>())
+            {
+                r.enabled = false;
+            }
             Board.SendMessage("ChangeColor", _currentSelectedGameObject.GetComponent<Renderer>().material);
         }
 

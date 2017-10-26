@@ -25,7 +25,7 @@ namespace Assets.HoloBoard.Scripts
         private float _lineWidth;
 
         // Prochaine fonctionnalités
-        public GameObject InkObj;
+        private GameObject InkObj;
 
         /// <summary>
         /// Cursor app
