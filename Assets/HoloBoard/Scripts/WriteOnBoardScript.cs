@@ -8,11 +8,16 @@ using UnityEngine.VR.WSA.Input;
 namespace Assets.HoloBoard.Scripts
 {
     public class WriteOnBoardScript : MonoBehaviour, IManipulationHandler, IInputClickHandler
-    {
-        /// <summary>
-        /// Drawing line on the board
-        /// </summary>
-        private readonly List<GameObject> _lines = new List<GameObject>();
+	{
+		/// <summary>
+		/// Drawing lines on the board
+		/// </summary>
+		private readonly List<GameObject> _lines = new List<GameObject>();
+
+		/// <summary>
+		/// Backup of drawing lines on the board
+		/// </summary>
+		private readonly List<GameObject> _linesBackup = new List<GameObject>();
 
         /// <summary>
         /// Pen color
@@ -198,6 +203,40 @@ namespace Assets.HoloBoard.Scripts
             Vector3 position = this.GetHandBoardHitPosition(positionClick);
             AddPoint(position);
         }
+
+		/// <summary>
+		/// Removes the board and backup it content.
+		/// </summary>
+		public void RemoveBoard()
+		{
+			//Remove the backup array
+			if(this._linesBackup.Count() > 0){
+				foreach(GameObject obj in _linesBackup){
+					Destroy (obj);
+					_linesBackup.Clear ();
+				}
+			}
+			//Disactive all the lines on the board
+			foreach(GameObject obj in _lines){
+				obj.SetActive (false);
+			}
+			this._linesBackup.AddRange(_lines);
+			this._lines.Clear();
+		}
+
+		/// <summary>
+		/// Restores the board.
+		/// </summary>
+		public void RestoreBoard()
+		{
+			//Don't execute the fnc if backup array is empty or lines array isnt removed
+			if(this._linesBackup.Count() <= 0 || this._lines.Count() > 0){
+				return;
+			}
+			this._lines.AddRange (_linesBackup);
+			foreach(GameObject obj in _lines){
+				obj.SetActive (true);
+			}
+		}
     }
 }
-
