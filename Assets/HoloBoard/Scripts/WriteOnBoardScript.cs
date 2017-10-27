@@ -10,12 +10,12 @@ namespace Assets.HoloBoard.Scripts
     public class WriteOnBoardScript : MonoBehaviour, IManipulationHandler, IInputClickHandler
 	{
 		/// <summary>
-		/// Drawing line on the board
+		/// Drawing lines on the board
 		/// </summary>
 		private readonly List<GameObject> _lines = new List<GameObject>();
 
 		/// <summary>
-		/// Drawing line on the board
+		/// Backup of drawing lines on the board
 		/// </summary>
 		private readonly List<GameObject> _linesBackup = new List<GameObject>();
 
