@@ -1,85 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HoloToolkit.Unity.InputModule;
-
 using UnityEngine;
 using UnityEngine.VR.WSA.Input;
 
-namespace Assets.HoloBoard.Scripts
+namespace Assets.HoloBoard.Scripts.Board
 {
-    public class WriteOnBoardScript : MonoBehaviour, IManipulationHandler, IInputClickHandler
+    public class WriteScript : MonoBehaviour, IManipulationHandler, IInputClickHandler
     {
         /// <summary>
         /// Drawing line on the board
         /// </summary>
         private readonly List<GameObject> _lines = new List<GameObject>();
-
-        /// <summary>
-        /// Pen color
-        /// </summary>
-        private Material _lineColor;
-
-        /// <summary>
-        /// Pen size
-        /// </summary>
-        private float _lineWidth;
-
-        // Prochaine fonctionnalités
-        private GameObject InkObj;
+        
 
         /// <summary>
         /// Cursor app
         /// </summary>
         public GameObject HoloCursor;
-        
-
-        void Awake()
-        {
-            this._lineWidth = 0.01f;
-
-            // Prochaines fonctionnalités
-            //InteractionManager.SourceDetected += HandDetected;
-            //InteractionManager.SourceUpdated += HandDetected;
-        }
-
-        // Prochaines fonctionnalités
-        public void HandDetected(InteractionSourceState source)
-        {
-            if (source.source.kind == InteractionSourceKind.Hand)
-            {
-                Vector3 handPos;
-                source.properties.location.TryGetPosition(out handPos);
-
-                if (source.properties.location.TryGetPosition(out handPos))
-                {
-                    RaycastHit hitInfo;
-                    if (Physics.Raycast(handPos, Camera.main.transform.forward, out hitInfo))
-                    {
-                        Vector3 pos = hitInfo.point;
-                        InkObj.transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y, InkObj.transform.position.z);
-                    }    
-                }
-                
-            }
-        }
-
-        /// <summary>
-        /// When color selector change
-        /// </summary>
-        /// <param name="newColor">New pen color</param>
-        public void ChangeColor(Material newColor)
-        {
-            this._lineColor = newColor;
-        }
-
-        /// <summary>
-        /// When size selector change
-        /// </summary>
-        /// <param name="newSize">New Size</param>
-        public void ChangeSize(float newSize)
-        {
-            this._lineWidth = newSize;
-        }
 
         /// <summary>
         /// Create a new line render on the board
@@ -88,16 +26,16 @@ namespace Assets.HoloBoard.Scripts
         {
             GameObject line = new GameObject();
             LineRenderer lineR = line.AddComponent<LineRenderer>();
-            lineR.material = _lineColor;
+            lineR.material = HoloBoard.PenColor;
             lineR.positionCount = 0;
 
             // Width
-            lineR.startWidth = _lineWidth;
-            lineR.endWidth = _lineWidth;
+            lineR.startWidth = HoloBoard.PenSize;
+            lineR.endWidth = HoloBoard.PenSize;
         
             // Color
-            lineR.startColor = _lineColor.color;
-            lineR.endColor = _lineColor.color;
+            lineR.startColor = HoloBoard.PenColor.color;
+            lineR.endColor = HoloBoard.PenColor.color;
             lineR.useWorldSpace = true;
 
             this._lines.Add(line);
@@ -119,7 +57,7 @@ namespace Assets.HoloBoard.Scripts
         /// <summary>
         /// Get raycast hit point result from user hand position to board
         /// </summary>
-        /// <param name="eventData"></param>
+        /// <param name="position"></param>
         /// <returns>The hit point on the board</returns>
         private Vector3 GetHandBoardHitPosition(Vector3 position)
         {
@@ -136,7 +74,7 @@ namespace Assets.HoloBoard.Scripts
         {
             InitNewLine();
             AddNewPositionToTheCurrentLine(startPosition);
-            AddNewPositionToTheCurrentLine(new Vector3(startPosition.x + _lineWidth, startPosition.y + _lineWidth));
+            AddNewPositionToTheCurrentLine(new Vector3(startPosition.x + HoloBoard.PenSize, startPosition.y + HoloBoard.PenSize));
         }
 
         /// <summary>

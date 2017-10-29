@@ -1,4 +1,10 @@
 Holotoolkit/
+Holotoolkit-Examples/
+Holotoolkit-Examples.meta
+External.meta
+External/
+WSATestCertificate.pfx
+WSATestCertificate.pfx.meta
 UWP/
 Temp/
 /.vs/

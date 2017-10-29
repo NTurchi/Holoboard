@@ -1,16 +1,13 @@
 ﻿using System.Globalization;
+using Assets.HoloBoard.Scripts.EventManager;
+using Assets.HoloBoard.Scripts.EventManager.Menu;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
-namespace Assets.HoloBoard.Scripts
+namespace Assets.HoloBoard.Scripts.Menu.PenSize
 {
     public class SizeButtonScript : MonoBehaviour, IInputClickHandler
     {
-        /// <summary>
-        /// The application Board
-        /// </summary>
-        public GameObject Board;
-
         /// <summary>
         /// Sizing scale for pen size 
         /// </summary>
@@ -25,6 +22,7 @@ namespace Assets.HoloBoard.Scripts
         /// Current board pen size
         /// </summary>
         public GameObject Size;
+        
 
         /// <summary>
         /// When user tap on increase or decrease size button
@@ -43,8 +41,8 @@ namespace Assets.HoloBoard.Scripts
             {
                 tmpSize -= SizeIncreaseScale;
             }
-            Size.GetComponent<TextMesh>().text = tmpSize.ToString();
-            Board.SendMessage("ChangeSize", tmpSize);
+            Size.GetComponent<TextMesh>().text = tmpSize.ToString(CultureInfo.InvariantCulture);
+            HoloBoardEventManager.Instance.EventManager<SizeEventManager>().PenSizeChanged(tmpSize);
         }
     }
 }
