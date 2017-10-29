@@ -209,12 +209,15 @@ namespace Assets.HoloBoard.Scripts
 		/// </summary>
 		public void RemoveBoard()
 		{
+			Debug.Log ("RemoveBoard:");
+			Debug.Log ("Lines backup: " + this._linesBackup.Count());
+			Debug.Log ("Lines : " + this._lines.Count());
 			//Remove the backup array
 			if(this._linesBackup.Count() > 0){
 				foreach(GameObject obj in _linesBackup){
 					Destroy (obj);
-					_linesBackup.Clear ();
 				}
+				_linesBackup.Clear ();
 			}
 			//Disactive all the lines on the board
 			foreach(GameObject obj in _lines){
@@ -229,6 +232,9 @@ namespace Assets.HoloBoard.Scripts
 		/// </summary>
 		public void RestoreBoard()
 		{
+			Debug.Log ("RestoreBoard:");
+			Debug.Log ("Lines backup: " + this._linesBackup.Count());
+			Debug.Log ("Lines : " + this._lines.Count());
 			//Don't execute the fnc if backup array is empty or lines array isnt removed
 			if(this._linesBackup.Count() <= 0 || this._lines.Count() > 0){
 				return;
