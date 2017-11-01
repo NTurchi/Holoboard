@@ -2,7 +2,7 @@
 using System.Linq;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
-using UnityEngine.VR.WSA.Input;
+
 
 namespace Assets.HoloBoard.Scripts.Board
 {
@@ -84,7 +84,7 @@ namespace Assets.HoloBoard.Scripts.Board
         public void OnManipulationStarted(ManipulationEventData eventData)
         {
             // Push board on modal
-            InputManager.Instance.PushModalInputHandler(this.gameObject);
+            //InputManager.Instance.PushModalInputHandler(this.gameObject);
            
             HoloCursor.SetActive(false);
 
@@ -131,7 +131,7 @@ namespace Assets.HoloBoard.Scripts.Board
         public void OnInputClicked(InputClickedEventData eventData)
         {
             Vector3 positionClick;
-            eventData.InputSource.TryGetPosition(eventData.SourceId, out positionClick);
+            eventData.InputSource.TryGetPointerPosition(eventData.SourceId, out positionClick);
             // Dessin du point
             Vector3 position = this.GetHandBoardHitPosition(positionClick);
             AddPoint(position);

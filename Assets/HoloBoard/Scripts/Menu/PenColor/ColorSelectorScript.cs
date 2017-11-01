@@ -21,8 +21,6 @@ namespace Assets.HoloBoard.Scripts.Menu.PenColor
         /// </summary>
         private GameObject _tmpSelector;
 
-       
-
         void Start()
         {
             _currentSelectedGameObject = gameObject.GetComponentsInChildren<Transform>()[1].gameObject;

@@ -1,13 +1,12 @@
 Holotoolkit/
 Holotoolkit-Examples/
 Holotoolkit-Examples.meta
-External.meta
-External/
 UWP/
 Temp/
 /.vs/
 .vs/
 Library/
- *.csproj
+*.csproj
 Holoboard.csproj
 Holoboard.Editor.csproj
+Holoboard.Player.csproj

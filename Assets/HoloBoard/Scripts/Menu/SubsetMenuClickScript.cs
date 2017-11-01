@@ -1,18 +1,19 @@
 ﻿using Assets.HoloBoard.Scripts.EventManager;
 using Assets.HoloBoard.Scripts.EventManager.Menu;
 using HoloToolkit.Unity.InputModule;
+using UnityEngine;
 
-namespace Assets.HoloBoard.Scripts.Menu.PenSize
+namespace Assets.HoloBoard.Scripts.Menu
 {
-    public class PenSizeMenuScript : SubsetMenu, IInputClickHandler
+    public class SubsetMenuClickScript : MonoBehaviour, IInputClickHandler
     {
         /// <summary>
-        /// When user tap on color menu
+        /// When user on subset menu
         /// </summary>
         /// <param name="eventData"></param>
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            HoloBoardEventManager.Instance.EventManager<MenuEventManager>().SubsetMenuClicked(gameObject);
+            HoloBoardEventManager.Instance.EventManager<MenuEventManager>().SubsetMenuClicked(this.gameObject);
         }
     }
 }

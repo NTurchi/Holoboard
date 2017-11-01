@@ -1,5 +1,6 @@
 ﻿using Assets.HoloBoard.Scripts.EventManager;
 using Assets.HoloBoard.Scripts.EventManager.Menu;
+using HoloToolkit.Sharing;
 using UnityEngine;
 
 namespace Assets.HoloBoard.Scripts.Menu
@@ -15,6 +16,8 @@ namespace Assets.HoloBoard.Scripts.Menu
         {
             HoloBoardEventManager.Instance.EventManager<MenuEventManager>().OnMenuHeaderClicked +=
                 OnMenuHeaderClicked;
+            Debug.Log(_isEnabled);
+
             this.gameObject.SetActive(_isEnabled);
         }
 
@@ -23,6 +26,7 @@ namespace Assets.HoloBoard.Scripts.Menu
         /// </summary>
         public void OnMenuHeaderClicked()
         {
+            Debug.Log(_isEnabled);
             _isEnabled = !_isEnabled;
             this.gameObject.SetActive(_isEnabled);
         }
